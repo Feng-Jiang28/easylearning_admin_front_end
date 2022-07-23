@@ -59,22 +59,21 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
 
     setTimeout(async() => {
       try{
-        const response = await fetch(BASE_API + '/eduservice/user/login');
+        const response = await fetch(BASE_API + '/serviceedu/user/login', {method:'POST'});
         if(!response.ok){
           throw new Error('no response');
         }
         const data = await response.json();
-        localStorage.setItem('id_token',1)
-        console.log(data.id_token);
-        setError(null)
-        setIsLoading(false)
-        dispatch({ type: 'LOGIN_SUCCESS' })
-
-        history.push('/app/dashboard')
+        console.log(data.data.id_token);
         }catch(error){
           setError(error.message);
       }  
-          
+      setIsLoading(false)
+      localStorage.setItem('id_token',1)
+      setError(null)
+      setIsLoading(false)
+      dispatch({ type: 'LOGIN_SUCCESS' })
+      history.push('/app/dashboard')    
       
     }, 2000);
   } else {
