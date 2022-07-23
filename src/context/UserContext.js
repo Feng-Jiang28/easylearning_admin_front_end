@@ -1,4 +1,5 @@
 import React from "react";
+import BASE_API from "../constants/const";
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();
@@ -54,13 +55,27 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
   setIsLoading(true);
 
   if (!!login && !!password) {
-    setTimeout(() => {
-      localStorage.setItem('id_token', 1)
-      setError(null)
-      setIsLoading(false)
-      dispatch({ type: 'LOGIN_SUCCESS' })
 
-      history.push('/app/dashboard')
+
+    setTimeout(async() => {
+      try{
+        const response = await fetch(BASE_API + '/eduservice/user/login');
+        if(!response.ok){
+          throw new Error('no response');
+        }
+        const data = await response.json();
+        localStorage.setItem('id_token',1)
+        console.log(data.id_token);
+        setError(null)
+        setIsLoading(false)
+        dispatch({ type: 'LOGIN_SUCCESS' })
+
+        history.push('/app/dashboard')
+        }catch(error){
+          setError(error.message);
+      }  
+          
+      
     }, 2000);
   } else {
     dispatch({ type: "LOGIN_FAILURE" });
