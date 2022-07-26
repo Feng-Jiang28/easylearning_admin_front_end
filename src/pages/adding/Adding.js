@@ -27,6 +27,18 @@ export default function Adding() {
     };
 
     alert(JSON.stringify(reqBody));
+
+    fetch("http://localhost:8083/eduoss/fileoss/upload", {
+        method: "POST",
+        body: JSON.stringify(reqBody),
+        headers: {
+          "Content-Type": "application.json",
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data));
   }
 
   return (
